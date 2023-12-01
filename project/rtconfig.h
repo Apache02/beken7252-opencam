@@ -42,7 +42,7 @@
 #define RT_USING_DEVICE_OPS
 #define RT_USING_CONSOLE
 #define RT_CONSOLEBUF_SIZE 128
-#define RT_CONSOLE_DEVICE_NAME "uart1"
+#define RT_CONSOLE_DEVICE_NAME "uart2"
 
 /* RT-Thread Components */
 
@@ -293,7 +293,7 @@
 
 
 /* Hardware Drivers Config */
-#define BEKEN_USING_UART1
+#define BEKEN_USING_UART2
 #define BEKEN_USING_WDT
 #define BEKEN_USING_FLASH
 #define BEKEN_USING_PWM
