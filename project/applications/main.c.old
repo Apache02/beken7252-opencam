@@ -49,7 +49,7 @@
 static int wlan_app_init(void);
 
 extern const struct romfs_dirent romfs_root;
-#define DFS_ROMFS_ROOT          (&romfs_root) 
+#define DFS_ROMFS_ROOT          (&romfs_root)
 extern rt_err_t rt_audio_codec_hw_init(void);
 extern int player_system_init(void);
 extern void user_main( beken_thread_arg_t args );
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     if(dfs_mount("sd0", "/sd", "elm", 0, 0) == 0)
         rt_kprintf("SD File System initialized!\n");
     else
-        rt_kprintf("SD File System initialzation failed!\n");
+        rt_kprintf("SD File System initialization failed!\n");
 #endif
 
 #if 0
