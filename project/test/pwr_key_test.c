@@ -93,7 +93,7 @@ static void pwr_btn_thread_entry(void *p)
     while(1)
     {
         /* 20 ms */
-        rt_thread_mdelay(10);
+        rt_thread_mdelay(100);
         button_ticks();
     }
 }
@@ -112,19 +112,19 @@ int pwr_btn_test(int argc, char *argv[])
     rt_thread_startup(thread);
 
     /* low level driver  */
-    rt_pin_mode(BUTTON_PWR_BTN,PIN_MODE_INPUT_PULLUP);
-    button_init(&pwr_btn,pwr_btn_read_pin,PIN_HIGH);
-    button_attach(&pwr_btn, PRESS_DOWN,    button_callback);
-    button_attach(&pwr_btn, PRESS_UP,         button_callback);
+//    rt_pin_mode(BUTTON_PWR_BTN,PIN_MODE_INPUT_PULLUP);
+//    button_init(&pwr_btn,pwr_btn_read_pin,PIN_HIGH);
+//    button_attach(&pwr_btn, PRESS_DOWN,    button_callback);
+//    button_attach(&pwr_btn, PRESS_UP,         button_callback);
     // button_attach(&pwr_btn, PRESS_REPEAT,     button_callback);
     // button_attach(&pwr_btn, SINGLE_CLICK,     button_callback);
     // button_attach(&pwr_btn, DOUBLE_CLICK,     button_callback);
-    button_attach(&pwr_btn, LONG_RRESS_START, button_callback);
-    button_attach(&pwr_btn, LONG_PRESS_HOLD,  button_callback);
-    button_start (&pwr_btn);
+//    button_attach(&pwr_btn, LONG_RRESS_START, button_callback);
+//    button_attach(&pwr_btn, LONG_PRESS_HOLD,  button_callback);
+//    button_start (&pwr_btn);
 
-    return RT_EOK; 
-
+    return RT_EOK;
 }
+
 INIT_APP_EXPORT(pwr_btn_test);
 MSH_CMD_EXPORT(pwr_btn_test,pwr_btn_test);

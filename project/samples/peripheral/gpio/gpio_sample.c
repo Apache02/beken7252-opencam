@@ -27,33 +27,33 @@
 
 #include <drivers/pin.h>
 
-#define LED0    30
-#define KEY0    4
-#define KEY1    7
+#define LED0        26
+#define KEY_POWER   2
+#define KEY_MODE    7
 
 void hdr_callback(void *args)
 {
     char *a = args;
-    rt_kprintf("key0 down! %s\n", a);
+    rt_kprintf("key power down! %s\n", a);
 }
 
 void irq_thread_entry(void *parameter)
 {
-    rt_pin_mode(KEY0, PIN_MODE_INPUT_PULLUP);
-    rt_pin_attach_irq(KEY0, PIN_IRQ_MODE_FALLING, hdr_callback, (void *)"callback args");
-    rt_pin_irq_enable(KEY0, PIN_IRQ_ENABLE);
+    rt_pin_mode(KEY_POWER, PIN_MODE_INPUT_PULLUP);
+    rt_pin_attach_irq(KEY_POWER, PIN_IRQ_MODE_FALLING, hdr_callback, (void *)"callback args");
+    rt_pin_irq_enable(KEY_POWER, PIN_IRQ_ENABLE);
 
 }
 
 void key_thread_entry(void *parameter)
 {
-    rt_pin_mode(KEY1, PIN_MODE_INPUT_PULLUP);
+    rt_pin_mode(KEY_MODE, PIN_MODE_INPUT_PULLUP);
 
     while (1)
     {
-        if (rt_pin_read(KEY1) == PIN_LOW)
+        if (rt_pin_read(KEY_MODE) == PIN_LOW)
         {
-            rt_kprintf("key1 pressed!\n");
+            rt_kprintf("key mode pressed!\n");
         }
 
         rt_thread_delay(rt_tick_from_millisecond(10));

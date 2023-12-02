@@ -9,20 +9,20 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('192.168.10.110', 6001))
  
 s.listen(5)
-print 'Waiting for connection...'
+print('Waiting for connection...')
 
 def tcp_link(sock,addr):
-    print 'Accept new connection from %s:%s...' % addr
+    print('Accept new connection from %s:%s...' % addr)
     sock.send('Welcome to RT-Thread!')
     while True:
         data=sock.recv(1024)
         time.sleep(1)
         if data=='exit' or not data:
             break
-        print data
+        print(data)
         sock.send('Hello,%s!'%data)
     sock.close()
-    print 'Connection from %s:%s closed.'%addr
+    print('Connection from %s:%s closed.'%addr)
 
 while True:
     

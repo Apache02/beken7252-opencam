@@ -25,7 +25,6 @@
 #include "rtthread.h"
 #include <dfs.h>
 #include <dfs_fs.h>
-#include "player.h"
 
 #include "include.h"
 #include "driver_pub.h"
@@ -36,11 +35,6 @@
 #include <fal.h>
 #include "rt_ota.h"
 
-#include "format_m4a.h"
-#include "codec_helixmp3.h"
-#include "codec_opencore_amr.h"
-#include "player_system.h"
-
 #ifdef PKG_USING_LITTLEFS
 #include "BkDriverFlash.h"
 #include "drv_flash.h"
@@ -49,7 +43,7 @@
 static int wlan_app_init(void);
 
 extern const struct romfs_dirent romfs_root;
-#define DFS_ROMFS_ROOT          (&romfs_root) 
+#define DFS_ROMFS_ROOT          (&romfs_root)
 extern rt_err_t rt_audio_codec_hw_init(void);
 extern int player_system_init(void);
 extern void user_main( beken_thread_arg_t args );
@@ -73,7 +67,7 @@ int main(int argc, char **argv)
     if(dfs_mount("sd0", "/sd", "elm", 0, 0) == 0)
         rt_kprintf("SD File System initialized!\n");
     else
-        rt_kprintf("SD File System initialzation failed!\n");
+        rt_kprintf("SD File System initialization failed!\n");
 #endif
 
 #if 0
@@ -142,19 +136,6 @@ int main(int argc, char **argv)
 #endif /* PKG_USING_EASYFLASH */
 
     wlan_app_init();
-	rt_audio_codec_hw_init();
-
-    /* 注册Codec */ 
-    player_codec_helixmp3_register(); 
-    player_codec_beken_aac_register(); 
-    player_codec_beken_m4a_register(); 
-	player_codec_opencore_amr_register(); 
-
-    
-	
-	/* 初始化 */ 
-	player_system_init();
-    audio_device_mic_open(); /*open mic device */
 
     #if ((CFG_USE_APP_DEMO_VIDEO_TRANSFER) || (CFG_SUPPORT_TIANZHIHENG_DRONE))
     // user_main(NULL);
