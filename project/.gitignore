@@ -1,5 +1,6 @@
 build/
 .sconsign.dblite
+*.elf
 *.bin
 *.map
 *.rbl
