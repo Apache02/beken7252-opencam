@@ -686,6 +686,15 @@ void dhcpd_start(const char *netif_name)
         goto _exit;
     }
 
+    ip_addr_t ip_addr;
+    ip_addr_t netmask;
+    inet_aton(DHCPD_SERVER_IP, &ip_addr);
+    inet_aton("255.255.255.0", &netmask);
+
+    netif->ip_addr = ip_addr;
+    netif->gw = ip_addr;
+    netif->netmask = netmask;
+
     ip4_addr_t ip_start, ip_end;
     ip_start.addr = ntohl(ntohl(netif->ip_addr.addr & netif->netmask.addr) 
                 | (DHCPD_CLIENT_IP_MIN) & ntohl(~netif->netmask.addr));
