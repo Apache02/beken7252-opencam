@@ -44,49 +44,52 @@ static int wlan_app_init(void);
 
 extern const struct romfs_dirent romfs_root;
 #define DFS_ROMFS_ROOT          (&romfs_root)
+
 extern rt_err_t rt_audio_codec_hw_init(void);
+
 extern int player_system_init(void);
-extern void user_main( beken_thread_arg_t args );
+
+extern void user_main(beken_thread_arg_t args);
 
 extern int rt_hw_flash_disk_readonly_init(const char *name, uint32_t base, uint32_t sector_size, uint32_t capacity);
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     /* mount ROMFS as root directory */
-    if (dfs_mount(RT_NULL, "/", "rom", 0, (const void *)DFS_ROMFS_ROOT) == 0)
-    {
+    if (dfs_mount(RT_NULL, "/", "rom", 0, (const void *) DFS_ROMFS_ROOT) == 0) {
         rt_kprintf("ROMFS File System initialized!\n");
-    }
-    else
-    {
+    } else {
         rt_kprintf("ROMFS File System initialized Failed!\n");
     }
 
 #if 1
     /* mount sd card fat partition 1 as root directory */
-    if(dfs_mount("sd0", "/sd", "elm", 0, 0) == 0)
+    if (dfs_mount("sd0", "/sd", "elm", 0, 0) == 0) {
         rt_kprintf("SD File System initialized!\n");
-    else
+    } else {
         rt_kprintf("SD File System initialization failed!\n");
+    }
 #endif
 
 #if 0
     const struct fal_partition *dl_part = RT_NULL;
 
-    if ((dl_part = fal_partition_find(RT_BK_DL_PART_NAME)) != RT_NULL)
-    {
+    if ((dl_part = fal_partition_find(RT_BK_DL_PART_NAME)) != RT_NULL) {
         /* dump current firmware version. */
-        rt_kprintf("current image name: %s, version: %s, timestamp: %d \n", rt_ota_get_fw_dest_part_name(dl_part), rt_ota_get_fw_version(dl_part), rt_ota_get_fw_timestamp(dl_part));
+        rt_kprintf(
+                "current image name: %s, version: %s, timestamp: %d \n",
+                rt_ota_get_fw_dest_part_name(dl_part),
+                rt_ota_get_fw_version(dl_part),
+                rt_ota_get_fw_timestamp(dl_part)
+        );
 
         rt_hw_flash_disk_readonly_init("flash0", dl_part->offset + 96, 512, dl_part->len - 1024);
         /* mount sd card fat partition 1 as root directory */
-        if(dfs_mount("flash0", "/flash0", "elm", 0, 0) == 0)
+        if (dfs_mount("flash0", "/flash0", "elm", 0, 0) == 0) {
             rt_kprintf("FLASH File System initialized!\n");
-        else
+        } else {
             rt_kprintf("FLASH File System initialzation failed!\n");
-    }
-    else
-    {
+        }
+    } else {
         rt_kprintf("not found %s partition \n", RT_BK_DL_PART_NAME);
     }
 
@@ -99,30 +102,21 @@ int main(int argc, char **argv)
         struct rt_device *mtd_dev = RT_NULL;
 
         mtd_dev = fal_mtd_nor_device_create(lfs_part_name);
-        if (!mtd_dev)
-        {
+        if (!mtd_dev) {
             rt_kprintf("Can't create a mtd device on [%s] partition.\n", lfs_part_name);
-        }
-        else
-        {
+        } else {
             bk_flash_enable_security(FLASH_PROTECT_NONE);
             /* 挂载 littlefs */
-            if (dfs_mount(lfs_part_name, lfs_mount_path, "lfs", 0, 0) == 0)
-            {
+            if (dfs_mount(lfs_part_name, lfs_mount_path, "lfs", 0, 0) == 0) {
                 rt_kprintf("LFS Filesystem initialized! %s ==> %s\n", lfs_part_name, lfs_mount_path);
-            }
-            else
-            {
+            } else {
                 /* 格式化文件系统 */
                 dfs_mkfs("lfs", lfs_part_name);
                 rt_kprintf("mkfs [%s] LFS success\n", lfs_part_name);
                 /* 挂载 littlefs */
-                if (dfs_mount(lfs_part_name, lfs_mount_path, "lfs", 0, 0) == 0)
-                {
+                if (dfs_mount(lfs_part_name, lfs_mount_path, "lfs", 0, 0) == 0) {
                     rt_kprintf("LFS Filesystem initialized! %s ==> %s\n", lfs_part_name, lfs_mount_path);
-                }
-                else
-                {
+                } else {
                     rt_kprintf("Failed to initialize LFS filesystem! %s ==> %s\n", lfs_part_name, lfs_mount_path);
                 }
             }
@@ -137,9 +131,9 @@ int main(int argc, char **argv)
 
     wlan_app_init();
 
-    #if ((CFG_USE_APP_DEMO_VIDEO_TRANSFER) || (CFG_SUPPORT_TIANZHIHENG_DRONE))
+#if ((CFG_USE_APP_DEMO_VIDEO_TRANSFER) || (CFG_SUPPORT_TIANZHIHENG_DRONE))
     // user_main(NULL);
-    #endif
+#endif
 
     return 0;
 }
@@ -147,31 +141,28 @@ int main(int argc, char **argv)
 #ifdef BEKEN_USING_WLAN
 
 extern void ate_app_init(void);
+
 extern void ate_start(void);
 
-static int wlan_app_init(void)
-{
-	/* init ate mode check. */
-	ate_app_init();
+static int wlan_app_init(void) {
+    /* init ate mode check. */
+    ate_app_init();
 
-	if (get_ate_mode_state())
-	{
-		rt_kprintf("\r\n\r\nEnter automatic test mode...\r\n\r\n");
+    if (get_ate_mode_state()) {
+        rt_kprintf("\r\n\r\nEnter automatic test mode...\r\n\r\n");
 
-		finsh_set_echo(0);
-		finsh_set_prompt("#");
+        finsh_set_echo(0);
+        finsh_set_prompt("#");
 
-		ate_start();
-	}
-	else
-	{
-		rt_kprintf("Enter normal mode...\r\n\r\n");
-		app_start();
+        ate_start();
+    } else {
+        rt_kprintf("Enter normal mode...\r\n\r\n");
+        app_start();
 
-		//user_app_start();
-	}
+        //user_app_start();
+    }
 
-	return 0;
+    return 0;
 }
 
 #endif

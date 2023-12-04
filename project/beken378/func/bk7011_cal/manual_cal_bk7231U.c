@@ -58,7 +58,7 @@
 #define BK_FLASH_SECTOR_SIZE              (4*1024)  
 #define BK_FLASH_WRITE_CHECK_TIMES        3
 
-#define MCAL_DEBUG                        1
+#define MCAL_DEBUG                        0
 #include "uart_pub.h"
 #if MCAL_DEBUG
 #define MCAL_PRT      os_printf

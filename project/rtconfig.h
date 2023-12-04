@@ -249,7 +249,6 @@
 
 
 /* system packages */
-#define CONFIG_SOUND_MIXER                   0
 
 #define PKG_USING_FAL
 #define FAL_DEBUG_CONFIG
@@ -367,4 +366,6 @@
 //#define PKG_USING_QRCODE
 #define PKG_USING_LITTLEFS
 #define RT_USING_MTD_NOR
+
+#define RT_USING_FACTORYTEST
 #endif

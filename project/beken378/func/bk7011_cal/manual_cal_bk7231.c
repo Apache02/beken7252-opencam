@@ -62,6 +62,7 @@
 #define MCAL_FATAL    null_prf
 #endif
 
+
 #define BK_FLASH_OPT_TLV_HEADER           (0x00564c54)   // ASIC TLV
 typedef enum{
     TXID                        = 0x11111100,
@@ -121,6 +122,7 @@ typedef enum {
 #define SET_TXPWR_FLAG(p, flag)         {(p)->value &= (~(FLAG_MASK<<FLAG_POSI)); \
                                          (p)->value |= ((flag&FLAG_MASK)<<FLAG_POSI);}
 #define INIT_TXPWR_VALUE(gain, flag)    (((flag&FLAG_MASK)<<FLAG_POSI)|(gain&GAIN_MASK))
+
 typedef struct txpwr_st {
     UINT8 value;
 } TXPWR_ST, *TXPWR_PTR;
@@ -1833,5 +1835,5 @@ FAILURE:
 }
 #endif
 
-#endif // (CFG_SOC_NAME != SOC_BK7231) 
+#endif // (CFG_SOC_NAME == SOC_BK7231)
 
