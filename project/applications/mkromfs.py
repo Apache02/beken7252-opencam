@@ -5,7 +5,7 @@ import os
 
 import struct
 from collections import namedtuple
-import StringIO
+from functools import cmp_to_key
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -40,7 +40,7 @@ class File(object):
         head = 'static const rt_uint8_t %s[] = {\n' % \
                 (prefix + self.c_name)
         tail = '\n};'
-        return head + ','.join(('0x%02x' % ord(i) for i in self._data)) + tail
+        return head + ','.join(('0x%02x' % i for i in self._data)) + tail
 
     @property
     def entry_size(self):
@@ -81,7 +81,7 @@ class Folder(object):
         # TODO: take care of the unicode names
         for ent in os.listdir(u'.'):
             if os.path.isdir(ent):
-                cwd = os.getcwdu()
+                cwd = os.getcwd()
                 d = Folder(ent)
                 # depth-first
                 os.chdir(os.path.join(cwd, ent))
@@ -100,7 +100,7 @@ class Folder(object):
                 return 1
             else:
                 return -1
-        self._children.sort(cmp=_sort)
+        self._children.sort(key=cmp_to_key(_sort))
 
         # sort recursively
         for c in self._children:
