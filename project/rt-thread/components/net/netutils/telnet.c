@@ -48,6 +48,10 @@ struct telnet_session
 
 static struct telnet_session* telnet;
 
+#ifdef RT_USING_DEVICE_OPS
+static struct rt_device_ops telnet_device_ops;
+#endif
+
 /* process tx data */
 static void send_to_client(struct telnet_session* telnet)
 {
@@ -271,12 +275,22 @@ static void telnet_thread(void* parameter)
 
     /* register telnet device */
     telnet->device.type     = RT_Device_Class_Char;
+#ifdef RT_USING_DEVICE_OPS
+    telnet->device.ops = &telnet_device_ops;
+    telnet_device_ops.init     = telnet_init;
+    telnet_device_ops.open     = telnet_open;
+    telnet_device_ops.close    = telnet_close;
+    telnet_device_ops.read     = telnet_read;
+    telnet_device_ops.write    = telnet_write;
+    telnet_device_ops.control  = telnet_control;
+#else
     telnet->device.init     = telnet_init;
     telnet->device.open     = telnet_open;
     telnet->device.close    = telnet_close;
     telnet->device.read     = telnet_read;
     telnet->device.write    = telnet_write;
     telnet->device.control  = telnet_control;
+#endif
 
     /* no private */
     telnet->device.user_data = RT_NULL;
